@@ -136,3 +136,5 @@ gradle-app.setting
 .idea/artifacts/covid_statistics_main_war_exploded.xml
 .idea/artifacts/Gradle___org_LamBaiTapHANUk17___covid_statistics_1_0_SNAPSHOT_war.xml
 ignoreme
+
+**/hibernate.cfg.xml

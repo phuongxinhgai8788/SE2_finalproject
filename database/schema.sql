@@ -60,15 +60,17 @@ CREATE TABLE IF NOT EXISTS orders
     customerName       varchar(256)                          NOT NULL,
     address            varchar(1024)                         NOT NULL,
     phoneNumber        varchar(20)                           NOT NULL,
-    transportingUnitId int                                   NOT NULL,
-    transporterId      int                                   NOT NULL,
+    transportingUnitId int                                   NULL,
+    transporterId      int                                   NULL,
     notes              varchar(256)                          NULL,
     createdDate        timestamp   DEFAULT CURRENT_TIMESTAMP NULL,
     status             varchar(10) DEFAULT 'PENDING'         NULL,
     CONSTRAINT orders_transportingUnits___fk
-        FOREIGN KEY (transportingUnitId) REFERENCES transportingUnits (id),
+        FOREIGN KEY (transportingUnitId) REFERENCES transportingUnits (id)
+            ON DELETE SET NULL,
     CONSTRAINT transporters___fk
         FOREIGN KEY (transporterId) REFERENCES labors (id)
+            ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS orderDeliveryDetails
@@ -76,7 +78,8 @@ CREATE TABLE IF NOT EXISTS orderDeliveryDetails
     orderId     int                                 NOT NULL,
     updatedDate timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
     notes       varchar(1024)                       NOT NULL,
-    PRIMARY KEY (updatedDate, orderId),
+    PRIMARY KEY (updatedDate,
+                 orderId),
     CONSTRAINT orderDeliveryDetails_orders_id_fk
         FOREIGN KEY (orderId) REFERENCES orders (id)
             ON DELETE CASCADE
@@ -88,7 +91,8 @@ CREATE TABLE IF NOT EXISTS orderDetails
     itemId   int    NOT NULL,
     price    double NOT NULL,
     quantity int    NOT NULL,
-    PRIMARY KEY (orderId, itemId),
+    PRIMARY KEY (orderId,
+                 itemId),
     CONSTRAINT orderDetails_inventories_id_fk
         FOREIGN KEY (itemId) REFERENCES inventories (id)
             ON DELETE CASCADE,
@@ -113,7 +117,8 @@ CREATE TABLE IF NOT EXISTS warehouseItems
     inventoryId int NOT NULL,
     warehouseId int NOT NULL,
     quantity    int NOT NULL,
-    PRIMARY KEY (warehouseId, inventoryId),
+    PRIMARY KEY (warehouseId,
+                 inventoryId),
     CONSTRAINT warehouseItems_inventories_id_fk
         FOREIGN KEY (inventoryId) REFERENCES inventories (id)
             ON DELETE CASCADE,

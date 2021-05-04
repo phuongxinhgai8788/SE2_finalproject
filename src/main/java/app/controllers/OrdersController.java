@@ -78,25 +78,32 @@ public class OrdersController extends BaseController {
                 // get all add items params
                 var orderItemIds = req.getParameterValues("od_itemIds[]");
                 var orderItemPrices = req.getParameterValues("od_itemPrices[]");
-                var orderItemQuantities = req.getParameterValues(
-                    "od_itemQuantities[]");
-                var isItemDuplicated = !Arrays.stream(orderItemIds)
-                    .filter(i -> Collections.frequency(Arrays.asList(
-                        orderItemIds), i) > 1)
+                var orderItemQuantities = req.getParameterValues("od_itemQuantities[]");
+                var isItemDuplicated = orderItemIds != null
+                    && orderItemPrices != null
+                    && orderItemQuantities != null
+                    && !Arrays.stream(orderItemIds)
+                    .filter(i -> Collections.frequency(Arrays.asList(orderItemIds), i) > 1)
                     .collect(Collectors.toSet())
                     .isEmpty();
                 if (isItemDuplicated) {
                     req.setAttribute("items_itemId_errmsg",
                                      "items.itemId is duplicated");
                 }
+
+                // validate all params of the data object
+                var orderErrors = NTValidator.validate(orderDto);
+                if (!orderErrors.isEmpty() || isItemDuplicated) {
+                    boundValidationErrors(req, orderErrors);
+                    loadView(req, res, "orders-management/data-form.jsp");
+                    return;
+                }
+
                 // add those params to OrderDataObject.items
                 for (var i = 0; i < orderItemIds.length; i++) {
-                    var item =
-                        new OrderDetailDto(Integer.parseInt(orderItemIds[i]),
-                                           Double.parseDouble(
-                                               orderItemPrices[i]),
-                                           Integer.parseInt(
-                                               orderItemQuantities[i]));
+                    var item = new OrderDetailDto(Integer.parseInt(orderItemIds[i]),
+                                                  Double.parseDouble(orderItemPrices[i]),
+                                                  Integer.parseInt(orderItemQuantities[i]));
                     orderDto.getItems().add(item);
                 }
 
@@ -106,14 +113,6 @@ public class OrdersController extends BaseController {
                 var deliveryDetailDto =
                     new OrderDeliveryDetailDto(deliveryNotes);
                 orderDto.setDeliveryDetail(deliveryDetailDto);
-
-                // validate all params of the data object
-                var orderErrors = NTValidator.validate(orderDto);
-                if (!orderErrors.isEmpty() || isItemDuplicated) {
-                    boundValidationErrors(req, orderErrors);
-                    loadView(req, res, "orders-management/data-form.jsp");
-                    return;
-                }
 
                 // create Order first
                 var order = new Order();
@@ -156,10 +155,8 @@ public class OrdersController extends BaseController {
                 var customerName = req.getParameter("customerName");
                 var address = req.getParameter("address");
                 var phoneNumber = req.getParameter("phoneNumber");
-                var transportingUnitId = Integer.parseInt(req.getParameter(
-                    "transportingUnitId"));
-                var transporterId = Integer.parseInt(req.getParameter(
-                    "transporterId"));
+                var transportingUnitId = Integer.parseInt(req.getParameter("transportingUnitId"));
+                var transporterId = Integer.parseInt(req.getParameter("transporterId"));
                 var notes = req.getParameter("notes");
                 var status = req.getParameter("status");
 
@@ -197,13 +194,13 @@ public class OrdersController extends BaseController {
                 order = orderUtil.update(order);
                 req.setAttribute("data", order);
 
-                var deliveryDetail = new OrderDeliveryDetail();
-                deliveryDetail.setOrderId(order.getId());
-                deliveryDetail.setNotes(orderDto.getDeliveryDetail()
-                                            .getNotes());
-                deliveryDetail.setUpdatedDate(orderDto.getDeliveryDetail()
-                                                  .getUpdatedDate());
-                orderDeliveryDetailUtil.create(deliveryDetail);
+                if (orderDto.getDeliveryDetail() != null) {
+                    var deliveryDetail = new OrderDeliveryDetail();
+                    deliveryDetail.setOrderId(order.getId());
+                    deliveryDetail.setNotes(orderDto.getDeliveryDetail().getNotes());
+                    deliveryDetail.setUpdatedDate(orderDto.getDeliveryDetail().getUpdatedDate());
+                    orderDeliveryDetailUtil.create(deliveryDetail);
+                }
 
                 var orderDetails =
                     orderDetailUtil.getByOrderIdFullAttributes(id);

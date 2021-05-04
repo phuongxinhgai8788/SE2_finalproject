@@ -57,7 +57,9 @@ public class WarehousesController extends BaseController {
                 var warehouseItemIds = req.getParameterValues("wi_itemIds[]");
                 var warehouseItemQuantities = req.getParameterValues(
                     "wi_itemQuantities[]");
-                var isItemDuplicated = !Arrays.stream(warehouseItemIds)
+                var isItemDuplicated = warehouseItemIds != null
+                    && warehouseItemQuantities != null
+                    && !Arrays.stream(warehouseItemIds)
                     .filter(i -> Collections.frequency(Arrays.asList(warehouseItemIds), i) > 1)
                     .collect(Collectors.toSet())
                     .isEmpty();
@@ -66,17 +68,17 @@ public class WarehousesController extends BaseController {
                                      "items.itemId is duplicated");
                 }
 
-                for (var i = 0; i < warehouseItemIds.length; i++) {
-                    var item = new WarehouseItemDto(Integer.parseInt(warehouseItemIds[i]),
-                                                    Integer.parseInt(warehouseItemQuantities[i]));
-                    warehouseDto.getItems().add(item);
-                }
-
                 var errors = NTValidator.validate(warehouseDto);
                 if (!errors.isEmpty() || isItemDuplicated) {
                     boundValidationErrors(req, errors);
                     loadView(req, res, "warehouses-management/data-form.jsp");
                     return;
+                }
+
+                for (var i = 0; i < warehouseItemIds.length; i++) {
+                    var item = new WarehouseItemDto(Integer.parseInt(warehouseItemIds[i]),
+                                                    Integer.parseInt(warehouseItemQuantities[i]));
+                    warehouseDto.getItems().add(item);
                 }
 
                 var warehouse = new Warehouse();
@@ -111,9 +113,10 @@ public class WarehousesController extends BaseController {
                 var warehouseItemIds = req.getParameterValues("wi_itemIds[]");
                 var warehouseItemQuantities = req.getParameterValues(
                     "wi_itemQuantities[]");
-                var isItemDuplicated = !Arrays.stream(warehouseItemIds)
-                    .filter(i -> Collections.frequency(Arrays.asList(
-                        warehouseItemIds), i) > 1)
+                var isItemDuplicated = warehouseItemIds != null
+                    && warehouseItemQuantities != null
+                    && !Arrays.stream(warehouseItemIds)
+                    .filter(i -> Collections.frequency(Arrays.asList(warehouseItemIds), i) > 1)
                     .collect(Collectors.toSet())
                     .isEmpty();
                 if (isItemDuplicated) {
@@ -121,17 +124,17 @@ public class WarehousesController extends BaseController {
                                      "items.itemId is duplicated");
                 }
 
-                for (var i = 0; i < warehouseItemIds.length; i++) {
-                    var item = new WarehouseItemDto(Integer.parseInt(warehouseItemIds[i]),
-                                                    Integer.parseInt(warehouseItemQuantities[i]));
-                    warehouseDto.getItems().add(item);
-                }
-
                 var errors = NTValidator.validate(warehouseDto);
                 if (!errors.isEmpty() || isItemDuplicated) {
                     boundValidationErrors(req, errors);
                     loadView(req, res, "warehouses-management/data-form.jsp");
                     return;
+                }
+
+                for (var i = 0; i < warehouseItemIds.length; i++) {
+                    var item = new WarehouseItemDto(Integer.parseInt(warehouseItemIds[i]),
+                                                    Integer.parseInt(warehouseItemQuantities[i]));
+                    warehouseDto.getItems().add(item);
                 }
 
                 var warehouse = warehouseUtil.getById(id);

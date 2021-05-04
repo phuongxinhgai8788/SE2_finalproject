@@ -68,8 +68,7 @@ public class Order {
     }
 
     @Basic
-    @Column(name = "transportingUnitId",
-            nullable = false)
+    @Column(name = "transportingUnitId")
     public int getTransportingUnitId() {
         return transportingUnitId;
     }
@@ -79,8 +78,7 @@ public class Order {
     }
 
     @Basic
-    @Column(name = "transporterId",
-            nullable = false)
+    @Column(name = "transporterId")
     public int getTransporterId() {
         return transporterId;
     }
