@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 public abstract class BaseController extends HttpServlet {
@@ -46,6 +47,14 @@ public abstract class BaseController extends HttpServlet {
                               .toString()
                               .replaceAll("\\.", "_") + "_errmsg",
                     e.getMessage());
+        }
+    }
+    protected void setUTF8(HttpServletRequest req, HttpServletResponse res){
+        res.setContentType("text/html;charset=UTF-8");
+        try {
+            req.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 

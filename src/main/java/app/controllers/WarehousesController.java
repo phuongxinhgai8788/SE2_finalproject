@@ -221,12 +221,5 @@ public class WarehousesController extends BaseController {
             break;
         }
     }
-    private void setUTF8(HttpServletRequest req, HttpServletResponse res){
-        res.setContentType("text/html;charset=UTF-8");
-        try {
-            req.setCharacterEncoding("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
+
 }
