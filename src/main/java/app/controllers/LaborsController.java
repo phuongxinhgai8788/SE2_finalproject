@@ -125,6 +125,10 @@ public class LaborsController extends BaseController {
                     e.printStackTrace();
                 }
 
+                var id = Integer.parseInt(req.getParameter("id"));
+                var singleResult = laborUtil.getById(id);
+                req.setAttribute("data", singleResult);
+
                 var roles = roleUtil.getAll();
                 req.setAttribute("roles", roles);
                 var transportingUnits = transportingUnitUtil.getAll();
