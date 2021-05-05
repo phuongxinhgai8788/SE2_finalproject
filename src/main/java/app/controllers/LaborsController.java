@@ -17,10 +17,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 @WebServlet(urlPatterns = {
-        "/labors-management",
-        "/labors-management/create",
-        "/labors-management/update",
-        "/labors-management/delete"})
+    "/labors-management",
+    "/labors-management/create",
+    "/labors-management/update",
+    "/labors-management/delete"
+})
 public class LaborsController extends BaseController {
     private LaborUtil laborUtil;
     private RoleUtil roleUtil;
@@ -33,7 +34,7 @@ public class LaborsController extends BaseController {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         var uri = req.getServletPath();
 
         switch (uri) {
@@ -41,23 +42,23 @@ public class LaborsController extends BaseController {
                 try {
                     var name = req.getParameter("name");
                     var dateOfBirth = new Date(new SimpleDateFormat("yyyy-MM-dd")
-                            .parse(req.getParameter("dateOfBirth"))
-                            .getTime());
+                                                   .parse(req.getParameter("dateOfBirth"))
+                                                   .getTime());
                     var phoneNumber = req.getParameter("phoneNumber");
                     var roleId = Integer.parseInt(req.getParameter("roleId"));
                     var transportingUnitId = Integer.parseInt(
-                            req.getParameter("transportingUnitId"));
+                        req.getParameter("transportingUnitId"));
                     var password = req.getParameter("password");
                     var email = req.getParameter("email");
 
                     var laborDto = new LaborDto(
-                            name,
-                            dateOfBirth,
-                            phoneNumber,
-                            roleId,
-                            transportingUnitId,
-                            password,
-                            email);
+                        name,
+                        dateOfBirth,
+                        phoneNumber,
+                        roleId,
+                        transportingUnitId,
+                        password,
+                        email);
                     var errors = NTValidator.validate(laborDto);
                     if (!errors.isEmpty()) {
                         boundValidationErrors(req, errors);
@@ -86,22 +87,22 @@ public class LaborsController extends BaseController {
                     var id = Integer.parseInt(req.getParameter("id"));
                     var name = req.getParameter("name");
                     var dateOfBirth = new Date(new SimpleDateFormat("yyyy-MM-dd")
-                            .parse(req.getParameter("dateOfBirth"))
-                            .getTime());
+                                                   .parse(req.getParameter("dateOfBirth"))
+                                                   .getTime());
                     var phoneNumber = req.getParameter("phoneNumber");
                     var roleId = Integer.parseInt(req.getParameter("roleId"));
                     var transportingUnitId = Integer.parseInt(req.getParameter(
-                            "transportingUnitId"));
+                        "transportingUnitId"));
                     var password = req.getParameter("password");
                     var email = req.getParameter("email");
 
                     var laborDto = new LaborDto(name,
-                            dateOfBirth,
-                            phoneNumber,
-                            roleId,
-                            transportingUnitId,
-                            password,
-                            email);
+                                                dateOfBirth,
+                                                phoneNumber,
+                                                roleId,
+                                                transportingUnitId,
+                                                password,
+                                                email);
                     var errors = NTValidator.validate(laborDto);
                     if (!errors.isEmpty()) {
                         boundValidationErrors(req, errors);
@@ -131,17 +132,11 @@ public class LaborsController extends BaseController {
 
                 loadView(req, res, "labors-management/data-form.jsp");
                 break;
-            case "/labors-management/delete": {
-                var id = Integer.parseInt(req.getParameter("id"));
-                laborUtil.delete(id);
-                redirect(req, res, "/labors-management");
-                break;
-            }
         }
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         var uri = req.getServletPath();
 
         switch (uri) {
@@ -165,6 +160,12 @@ public class LaborsController extends BaseController {
                 req.setAttribute("transportingUnits", transportingUnits);
 
                 loadView(req, res, "labors-management/data-form.jsp");
+            }
+            break;
+            case "/labors-management/delete": {
+                var id = Integer.parseInt(req.getParameter("id"));
+                laborUtil.delete(id);
+                redirect(req, res, "/labors-management");
             }
             break;
             default:
