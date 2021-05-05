@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 @WebServlet("/login")
 public class LoginController extends BaseController {
@@ -28,6 +29,7 @@ public class LoginController extends BaseController {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+        setUTF8(req, res);
         var email = req.getParameter("email");
         var password = req.getParameter("password");
 
@@ -54,6 +56,14 @@ public class LoginController extends BaseController {
             }
 
             redirect(req, res, "/");
+        }
+    }
+    private void setUTF8(HttpServletRequest req, HttpServletResponse res){
+        res.setContentType("text/html;charset=UTF-8");
+        try {
+            req.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 }

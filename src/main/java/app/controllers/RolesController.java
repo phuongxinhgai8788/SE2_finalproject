@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 @WebServlet(urlPatterns = {
         "/roles-management",
@@ -82,7 +83,7 @@ public class RolesController extends BaseController {
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
         var uri = req.getServletPath();
-
+        setUTF8(req, res);
         switch (uri) {
             case "/roles-management/create":
                 loadView(req, res, "roles-management/data-form.jsp");
@@ -107,6 +108,14 @@ public class RolesController extends BaseController {
                 req.setAttribute("dataList", listResult);
                 loadView(req, res, "roles-management/index.jsp");
                 break;
+        }
+    }
+    private void setUTF8(HttpServletRequest req, HttpServletResponse res){
+        res.setContentType("text/html;charset=UTF-8");
+        try {
+            req.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 }

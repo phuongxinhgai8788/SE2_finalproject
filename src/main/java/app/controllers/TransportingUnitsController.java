@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 @WebServlet(urlPatterns = {
         "/transporting-units-management",
@@ -26,7 +27,7 @@ public class TransportingUnitsController extends BaseController {
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
         var uri = req.getServletPath();
-
+        setUTF8(req, res);
         switch (uri) {
             case "/transporting-units-management/create": {
                 var name = req.getParameter("name");
@@ -117,6 +118,14 @@ public class TransportingUnitsController extends BaseController {
                 req.setAttribute("dataList", listResult);
                 loadView(req, res, "transporting-units-management/index.jsp");
                 break;
+        }
+    }
+    private void setUTF8(HttpServletRequest req, HttpServletResponse res){
+        res.setContentType("text/html;charset=UTF-8");
+        try {
+            req.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,7 +40,7 @@ public class WarehousesController extends BaseController {
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
         throws ServletException, IOException {
         var uri = req.getServletPath();
-
+        setUTF8(req, res);
         var managers = laborUtil.getManagers();
         req.setAttribute("managers", managers);
 
@@ -218,6 +219,14 @@ public class WarehousesController extends BaseController {
                 loadView(req, res, "warehouses-management/index.jsp");
             }
             break;
+        }
+    }
+    private void setUTF8(HttpServletRequest req, HttpServletResponse res){
+        res.setContentType("text/html;charset=UTF-8");
+        try {
+            req.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 }
