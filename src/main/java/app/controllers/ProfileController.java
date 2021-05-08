@@ -56,6 +56,7 @@ public class ProfileController extends BaseController {
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
         try {
+            setUTF8(req, res);
             var name = req.getParameter("name");
             var dateOfBirth = new Date(new SimpleDateFormat("yyyy-MM-dd")
                     .parse(req.getParameter("dateOfBirth"))

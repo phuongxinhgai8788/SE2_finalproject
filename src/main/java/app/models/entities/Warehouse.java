@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "warehouses",
-       schema = "dhawuidhi",
+       schema = "scm",
        catalog = "")
 public class Warehouse {
     private int id;

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class OrderUtil extends Util<Order> {
     public enum STATUS {
-        PENDING,
+       PENDING,
         SHIPPING,
         FAILED,
         COMPLETED
@@ -20,20 +20,23 @@ public class OrderUtil extends Util<Order> {
     }
 
     public List<OrderDao> getAllFullAttributes() {
-        var query = "SELECT o.id,\n" +
-            "       o.customerName,\n" +
-            "       o.createdDate,\n" +
-            "       o.address,\n" +
-            "       o.phoneNumber,\n" +
-            "       o.notes,\n" +
-            "       tU.name                     AS transportingUnit,\n" +
-            "       SUM(oD.price * oD.quantity) AS totalCost,\n" +
-            "       o.status\n" +
-            "    FROM orders o\n" +
-            "             LEFT JOIN transportingUnits tU ON tU.id = o" +
-            ".transportingUnitId\n" +
-            "             LEFT JOIN orderDetails oD ON o.id = oD.orderId\n" +
-            "    GROUP BY o.id";
+        var query = String.format(
+                "SELECT o.id,\n" +
+                        "       o.customerName,\n" +
+                        "       o.createdDate,\n" +
+                        "       o.address,\n" +
+                        "       o.phoneNumber,\n" +
+                        "       o.notes,\n" +
+                        "       tU.name                     AS transportingUnit,\n" +
+                        "       SUM(oD.price * oD.quantity) AS totalCost,\n" +
+                        "       o.status\n" +
+                        "    FROM %s o\n" +
+                        "             LEFT JOIN transportingUnits tU ON tU.id = o" +
+                        ".transportingUnitId\n" +
+                        "             LEFT JOIN orderDetails oD ON o.id = oD" +
+                        ".orderId\n" +
+                        "    WHERE o.status <> %s\n" +
+                        "    GROUP BY o.id", tableName, "\"FAILED\"");
         try (var session = HibernateUtil.getSession()) {
             return session.createNativeQuery(query, OrderDao.class)
                 .getResultList();
@@ -85,6 +88,29 @@ public class OrderUtil extends Util<Order> {
         try (var session = HibernateUtil.getSession()) {
             return session.createNativeQuery(query, OrderDao.class)
                 .getResultList();
+        }
+    }
+    public List<OrderDao> getByStatusFullAttributes() {
+        var query = String.format(
+                "SELECT o.id,\n" +
+                        "       o.customerName,\n" +
+                        "       o.createdDate,\n" +
+                        "       o.address,\n" +
+                        "       o.phoneNumber,\n" +
+                        "       o.notes,\n" +
+                        "       tU.name                     AS transportingUnit,\n" +
+                        "       SUM(oD.price * oD.quantity) AS totalCost,\n" +
+                        "       o.status\n" +
+                        "    FROM %s o\n" +
+                        "             LEFT JOIN transportingUnits tU ON tU.id = o" +
+                        ".transportingUnitId\n" +
+                        "             LEFT JOIN orderDetails oD ON o.id = oD" +
+                        ".orderId\n" +
+                        "    WHERE o.status = %s\n" +
+                        "    GROUP BY o.id", tableName, "\"FAILED\"");
+        try (var session = HibernateUtil.getSession()) {
+            return session.createNativeQuery(query, OrderDao.class)
+                    .getResultList();
         }
     }
 

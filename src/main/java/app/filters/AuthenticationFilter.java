@@ -6,9 +6,6 @@ import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 @WebFilter(filterName = "AuthenticationFilter",
@@ -73,7 +70,8 @@ public class AuthenticationFilter implements Filter {
                 && !path.equals("/orders-management/details")
                 && !path.startsWith("/login")
                 && !path.startsWith("/logout")) {
-                httpResponse.sendError(403, "no bro, you dont have the rights");
+
+            httpResponse.sendError(403, "no bro, you dont have the rights");
                 return;
             }
 

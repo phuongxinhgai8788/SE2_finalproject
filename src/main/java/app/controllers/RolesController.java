@@ -28,6 +28,7 @@ public class RolesController extends BaseController {
             throws ServletException, IOException {
         var uri = req.getServletPath();
 
+        setUTF8(req, res);
         switch (uri) {
             case "/roles-management/create": {
                 var name = req.getParameter("name");

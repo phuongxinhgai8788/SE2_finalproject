@@ -1,7 +1,6 @@
 package app.controllers;
 
 import app.helpers.NTAuthSession;
-import app.models.dto.RoleDto;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

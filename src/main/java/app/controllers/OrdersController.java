@@ -27,7 +27,10 @@ import java.util.stream.Collectors;
     "/orders-management/details",
     "/orders-management/create",
     "/orders-management/update",
-    "/orders-management/delete"
+        "/returns-management",
+        "/returns-management/details",
+        "/returns-management/delete",
+        "/returns-management/change_status"
 })
 public class OrdersController extends BaseController {
     private OrderUtil orderUtil;
@@ -220,6 +223,75 @@ public class OrdersController extends BaseController {
                 loadView(req, res, "orders-management/data-form.jsp");
             }
             break;
+            case "/returns-management/change_status": {
+                var id = Integer.parseInt(req.getParameter("id"));
+                var customerName = req.getParameter("customerName");
+                var address = req.getParameter("address");
+                var phoneNumber = req.getParameter("phoneNumber");
+                var transportingUnitId = Integer.parseInt(req.getParameter("transportingUnitId"));
+                var transporterId = Integer.parseInt(req.getParameter("transporterId"));
+                var notes = req.getParameter("notes");
+                var status = req.getParameter("status");
+
+                var orderDto = new OrderDto(customerName,
+                        address,
+                        phoneNumber,
+                        transportingUnitId,
+                        transporterId,
+                        notes,
+                        status);
+
+                // get delivery detail params
+                var deliveryNotes = req.getParameter("odd_notes");
+                if (deliveryNotes != null) {
+                    // init a data object
+                    var deliveryDetailDto =
+                            new OrderDeliveryDetailDto(deliveryNotes);
+                    orderDto.setDeliveryDetail(deliveryDetailDto);
+                }
+
+                var errors = NTValidator.validate(orderDto);
+                if (!errors.isEmpty()) {
+                    boundValidationErrors(req, errors);
+                    loadView(req, res, "returns-management/data-form.jsp");
+                    return;
+                }
+
+                var order = orderUtil.getById(id);
+                order.setCustomerName(orderDto.getCustomerName());
+                order.setAddress(orderDto.getAddress());
+                order.setPhoneNumber(orderDto.getPhoneNumber());
+                order.setTransporterId(orderDto.getTransporterId());
+                order.setNotes(orderDto.getNotes());
+                order.setStatus(orderDto.getStatus());
+                order = orderUtil.update(order);
+                req.setAttribute("data", order);
+
+                if (orderDto.getDeliveryDetail() != null) {
+                    var deliveryDetail = new OrderDeliveryDetail();
+                    deliveryDetail.setOrderId(order.getId());
+                    deliveryDetail.setNotes(orderDto.getDeliveryDetail().getNotes());
+                    deliveryDetail.setUpdatedDate(orderDto.getDeliveryDetail().getUpdatedDate());
+                    orderDeliveryDetailUtil.create(deliveryDetail);
+                }
+
+                var orderDetails =
+                        orderDetailUtil.getByOrderIdFullAttributes(id);
+                req.setAttribute("orderDetails", orderDetails);
+
+                var deliveryDetails = orderDeliveryDetailUtil.getByOrderId(id);
+                req.setAttribute("deliveryDetails", deliveryDetails);
+
+                var transportingUnits = transportingUnitUtil.getAll();
+                req.setAttribute("transportingUnits", transportingUnits);
+
+                var transporters = laborUtil.getByTransportingUnitId(
+                        order.getTransportingUnitId());
+                req.setAttribute("transporters", transporters);
+
+                loadView(req, res, "returns-management/data-form.jsp");
+            }
+            break;
         }
     }
 
@@ -280,11 +352,64 @@ public class OrdersController extends BaseController {
                 loadView(req, res, "orders-management/single.jsp");
             }
             break;
-            default:
+            case "/returns-management/details": {
+                var id = Integer.parseInt(req.getParameter("id"));
+
+                var singleResult = orderUtil.getByIdFullAttributes(id);
+                req.setAttribute("data", singleResult);
+
+                var orderDetails =
+                        orderDetailUtil.getByOrderIdFullAttributes(id);
+                req.setAttribute("orderDetails", orderDetails);
+
+                var deliveryDetails = orderDeliveryDetailUtil.getByOrderId(id);
+                req.setAttribute("deliveryDetails", deliveryDetails);
+
+                loadView(req, res, "returns-management/single.jsp");
+            }
+            break;
+
+            case "/orders-management": {
                 var listResult = orderUtil.getAllFullAttributes();
                 req.setAttribute("dataList", listResult);
                 loadView(req, res, "orders-management/index.jsp");
+            }
                 break;
+            case "/returns-management":{
+                var listResult = orderUtil.getByStatusFullAttributes();
+                req.setAttribute("dataList", listResult);
+                loadView(req, res, "returns-management/index.jsp");
+            }
+            break;
+            case "/returns-management/delete":{
+               int id = Integer.parseInt(req.getParameter("id"));
+               orderUtil.delete(id);
+               redirect(req, res, "/returns-management");
+            }
+            break;
+            case "/returns-management/change_status": {
+                var id = Integer.parseInt(req.getParameter("id"));
+
+                var singleResult = orderUtil.getById(id);
+                req.setAttribute("data", singleResult);
+
+                var orderDetails =
+                        orderDetailUtil.getByOrderIdFullAttributes(id);
+                req.setAttribute("orderDetails", orderDetails);
+
+                var deliveryDetails = orderDeliveryDetailUtil.getByOrderId(id);
+                req.setAttribute("deliveryDetails", deliveryDetails);
+
+                var transportingUnits = transportingUnitUtil.getAll();
+                req.setAttribute("transportingUnits", transportingUnits);
+
+                var transporters = laborUtil.getByTransportingUnitId(
+                        singleResult.getTransportingUnitId());
+                req.setAttribute("transporters", transporters);
+
+                loadView(req, res, "returns-management/data-form.jsp");
+            }
+            break;
         }
     }
 

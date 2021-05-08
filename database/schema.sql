@@ -125,3 +125,13 @@ CREATE TABLE IF NOT EXISTS warehouseItems
         FOREIGN KEY (warehouseId) REFERENCES warehouses (id)
             ON DELETE CASCADE
 );
+CREATE TABLE IF NOT EXISTS returns
+(
+    id           int AUTO_INCREMENT
+        PRIMARY KEY,
+    orderId  int NOT NULL,
+        CONSTRAINT returns_order_id_fk
+        FOREIGN KEY (orderId) REFERENCES orders (id)
+        ON DELETE CASCADE
+
+);

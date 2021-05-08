@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "orders",
-       schema = "dhawuidhi",
+       schema = "scm",
        catalog = "")
 public class Order {
     private int id = -1;

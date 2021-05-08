@@ -18,10 +18,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 @WebServlet(urlPatterns = {
-        "/labors-management",
-        "/labors-management/create",
-        "/labors-management/update",
-        "/labors-management/delete"})
+    "/labors-management",
+    "/labors-management/create",
+    "/labors-management/update",
+    "/labors-management/delete"
+})
 public class LaborsController extends BaseController {
     private LaborUtil laborUtil;
     private RoleUtil roleUtil;
@@ -34,7 +35,7 @@ public class LaborsController extends BaseController {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         var uri = req.getServletPath();
         setUTF8(req, res);
         switch (uri) {
@@ -83,6 +84,7 @@ public class LaborsController extends BaseController {
                 redirect(req, res, "/labors-management");
                 break;
             case "/labors-management/update":
+            {
                 try {
                     var id = Integer.parseInt(req.getParameter("id"));
                     var name = req.getParameter("name");
@@ -103,6 +105,7 @@ public class LaborsController extends BaseController {
                             transportingUnitId,
                             password,
                             email);
+                    //Load the form when data is incorrect
                     var errors = NTValidator.validate(laborDto);
                     if (!errors.isEmpty()) {
                         boundValidationErrors(req, errors);
@@ -125,12 +128,18 @@ public class LaborsController extends BaseController {
                     e.printStackTrace();
                 }
 
+                //reload edit page after submitting form
+                var id = Integer.parseInt(req.getParameter("id"));
+                var singleResult = laborUtil.getById(id);
+                req.setAttribute("data", singleResult);
+
                 var roles = roleUtil.getAll();
                 req.setAttribute("roles", roles);
                 var transportingUnits = transportingUnitUtil.getAll();
                 req.setAttribute("transportingUnits", transportingUnits);
 
                 loadView(req, res, "labors-management/data-form.jsp");
+        }
                 break;
             case "/labors-management/delete": {
                 var id = Integer.parseInt(req.getParameter("id"));
@@ -138,12 +147,17 @@ public class LaborsController extends BaseController {
                 redirect(req, res, "/labors-management");
             }
             break;
-
+            default:
+                // TODO: fix
+                var listResult = laborUtil.getAllWithFullAttributes();
+                req.setAttribute("dataList", listResult);
+                loadView(req, res, "labors-management/index.jsp");
+                break;
         }
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         var uri = req.getServletPath();
 
         switch (uri) {
@@ -167,6 +181,12 @@ public class LaborsController extends BaseController {
                 req.setAttribute("transportingUnits", transportingUnits);
 
                 loadView(req, res, "labors-management/data-form.jsp");
+            }
+            break;
+            case "/labors-management/delete": {
+                var id = Integer.parseInt(req.getParameter("id"));
+                laborUtil.delete(id);
+                redirect(req, res, "/labors-management");
             }
             break;
             default:

@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "roles",
-       schema = "dhawuidhi",
+       schema = "scm",
        catalog = "")
 public class Role {
     private int id;

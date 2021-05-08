@@ -106,6 +106,18 @@
                     <span>Orders</span>
                 </a>
             </li>
+            <li>
+                <a href="${pageContext.request.contextPath}/inventories-management">
+                    <i class="zmdi zmdi-drink"></i>
+                    <span>Inventories</span>
+                </a>
+            </li>
+            <li>
+                <a href="${pageContext.request.contextPath}/returns-management">
+                    <i class="zmdi zmdi-spinner"></i>
+                    <span>Returns</span>
+                </a>
+            </li>
 
         </ul>
 

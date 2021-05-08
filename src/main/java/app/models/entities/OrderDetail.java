@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "orderDetails",
-       schema = "dhawuidhi",
+       schema = "scm",
        catalog = "")
 @IdClass(OrderDetailPK.class)
 public class OrderDetail {

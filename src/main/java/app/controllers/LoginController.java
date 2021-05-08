@@ -35,7 +35,7 @@ public class LoginController extends BaseController {
 
         var authDto = new AuthDto(email, password);
         var errors = NTValidator.validate(authDto);
-
+        //Reload login page when there is an error
         if (!errors.isEmpty()) {
             boundValidationErrors(req, errors);
             loadView(req, res, "auth/login.jsp");

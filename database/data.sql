@@ -26,7 +26,7 @@ values  (1, 'Karen Quinn', '1968-01-15', '01632 960506', 3, 2, '1', 'super@canna
         (5, 'Carl Hudson', '1931-11-10', '202-555-0176', 2, 2, '1', 'vsoufain@betrallydk.com'),
         (6, 'Wendy Clarkson', '1907-03-21', '202-555-0191', 3, 2, '1', '3welingtongoldboz@how2t.site');
 
-insert into se22021.orders (id, customerName, address, phoneNumber, transportingUnitId, transporterId, notes, createdDate, status)
+insert into scm.orders (id, customerName, address, phoneNumber, transportingUnitId, transporterId, notes, createdDate, status)
 values  (1, 'Mr. Christopher F Swartz', '655 Poe Lane, Fort Worth, Kansas', '913-570-6050', 1, 6, 'Home-time: from 5.00pm', '2021-04-29 06:03:35', 'SHIPPING'),
         (2, 'Ms. Margaret R Key', '4550 Fannie Street, Clute, Texas', '979-265-7112', 2, 1, 'Home-time: from 5.00pm', '2021-04-30 06:03:35', 'SHIPPING'); 
 
@@ -44,8 +44,9 @@ values  (1, 1, 20, 5),
         (2, 3, 50, 1),
         (2, 5, 53, 4);
 
-insert into se22021.warehouses (id, address, managerId)
-values  (1, '3687 Viking Drive, Dublin, Ohio
-740-717-3284', 1),
-        (2, '1458 Ridge Road, Dodge City, Kansas
-620-789-4485', 1);        
+insert into scm.warehouses (id, address, managerId)
+values  (4, '3687 Viking Drive, Dublin, Ohio
+740-717-3284', 6),
+        (5, '1458 Ridge Road, Dodge City, Kansas
+620-789-4485', 7);
+delete from scm.warehouses where id=4;

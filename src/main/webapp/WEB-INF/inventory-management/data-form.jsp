@@ -11,16 +11,17 @@
        : "update".concat("?id=").concat(param.id)}' />
 
 <t:template>
-    <form action="${pageContext.request.contextPath}/labors-management/${action}"
+    <form action="${pageContext.request.contextPath}/inventories-management/${action}"
           method="POST">
         <section class="card mt-3">
             <div class="card-content">
                 <div class="card-body">
                     <h5 class="card-title">
-                        Labor Form
+                        Inventory Form
                         <span class="float-right text-success">${msg}</span>
                     </h5>
                     <hr />
+
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -38,19 +39,6 @@
                                    readonly />
                         </div>
 
-                        <div class="form-group col-md-6">
-                            <label for="phoneNumber">Phone Number</label>
-                            <c:if test="${phoneNumber_errmsg != null}">
-                                -
-                                <span class="text-danger">${phoneNumber_errmsg}</span>
-                            </c:if>
-                            <input type="text"
-                                   class="form-control form-control-rounded"
-                                   placeholder="enter phone number"
-                                   id="phoneNumber"
-                                   name="phoneNumber"
-                                   value="${data.phoneNumber}" />
-                        </div>
 
                         <div class="form-group col-md-6">
                             <label for="name">Name</label>
@@ -66,18 +54,7 @@
                                    value="${data.name}" />
                         </div>
 
-                        <div class="form-group col-md-6">
-                            <label for="dateOfBirth">Date Of Birth</label>
-                            <c:if test="${dateOfBirth_errmsg != null}">
-                                -
-                                <span class="text-danger">${dateOfBirth_errmsg}</span>
-                            </c:if>
-                            <input type="date"
-                                   class="form-control form-control-rounded"
-                                   id="dateOfBirth"
-                                   name="dateOfBirth"
-                                   value="${data.dateOfBirth != null ? data.dateOfBirth : '2000-01-01'}" />
-                        </div>
+
 
                         <div class="form-group col-md-6">
                             <label for="email">Email</label>

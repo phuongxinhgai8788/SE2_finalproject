@@ -77,12 +77,7 @@ public class TransportingUnitsController extends BaseController {
                          "transporting-units-management/data-form.jsp");
             }
             break;
-            case "/transporting-units-management/delete": {
-                var id = Integer.parseInt(req.getParameter("id"));
-                transportingUnitUtil.delete(id);
-                redirect(req, res, "/transporting-units-management");
-            }
-            break;
+
         }
     }
 
