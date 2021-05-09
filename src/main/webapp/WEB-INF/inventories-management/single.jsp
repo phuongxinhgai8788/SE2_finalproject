@@ -13,32 +13,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h5 class="mb-1 d-flex align-items-center">
-                                Order #${data.id}
-                                <c:choose>
-                                    <c:when test="${data.status == 'PENDING'}">
-                                        <span class="badge badge-warning">${data.status}</span>
-                                    </c:when>
-                                    <c:when test="${data.status == 'SHIPPING'}">
-                                        <span class="badge badge-info">${data.status}</span>
-                                    </c:when>
-                                    <c:when test="${data.status == 'FAILED'}">
-                                        <span class="badge badge-danger">${data.status}</span>
-                                    </c:when>
-                                    <c:when test="${data.status == 'PENDING'}">
-                                        <span class="badge badge-success">${data.status}</span>
-                                    </c:when>
-                                </c:choose>
+                                Item #${data.id}
                             </h5>
                             <p class="font-weight-normal">
-                                Address: ${data.address}
+                                Name: ${data.name}
                             </p>
                         </div>
                         <div class="col-md-6 font-weight-normal text-right">
-                            <p>
-                                Created at:
-                                <b>${data.createdDate}</b>
-                            </p>
-                            <p>Phone Number: ${data.phoneNumber}</p>
+                            <image src="/images/image/${data.thumbnailUrl}"/>
                         </div>
                     </div>
                 </div>
@@ -46,49 +28,20 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">Product</th>
+                        <th scope="col">Source</th>
                         <th scope="col">Price</th>
                         <th scope="col">Qty</th>
-                        <th scope="col"
-                            class="text-right">
-                            Sub-total
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${orderDetails}"
-                               var="item">
-                        <tr>
-                            <th scope="row">
-                                <a href="${item.source}">${item.name}</a>
-                            </th>
-                            <td>$${item.price}</td>
-                            <td>x${item.quantity}</td>
+
+                            <td>${data.source}</td>
+                            <td>$${data.price}</td>
                             <td class="text-right">
                                 $${item.price * item.quantity}
                             </td>
-                        </tr>
-                    </c:forEach>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td class="text-right">Additional fee:</td>
-                        <td class="text-right">
-                            $0
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td class="text-right">Grand total:</td>
-                        <td class="text-right">
-                            $${data.totalCost}
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
-
-                <div class="block"> ${data.notes} </div>
             </div>
         </div>
     </section>
@@ -96,15 +49,25 @@
     <section class="card mt-3">
         <div class="card-content">
             <div class="card-body">
-                <h5 class="card-title">Delivery status</h5>
+                <h5 class="card-title">Store</h5>
 
                 <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Manager</th>
+                        <th scope="col">Quantity</th>
+                    </tr>
+                    </thead>
                     <tbody>
-                    <c:forEach items="${deliveryDetails}"
-                               var="item">
+                    <c:forEach stores="${storeDetails}"
+                               var="store">
                         <tr>
-                            <td>${item.updatedDate}</td>
-                            <td>${item.notes}</td>
+                            <td>${store.id}</td>
+                            <td>${store.address}</td>
+                            <td>${store.manager}</td>
+                            <td>${store.quantity}</td>
                         </tr>
                     </c:forEach>
                     </tbody>

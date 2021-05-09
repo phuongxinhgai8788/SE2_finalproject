@@ -24,7 +24,9 @@
             $('table tr')
                 .on('click', function (e) {
                     console.log($(this)
-                        .data('id'));
+                        .data('id'))
+                    const url = '${pageContext.request.contextPath}/inventories-management/details?id=' + id
+                    window.location = url;
                 })
         </script>
     </jsp:attribute>

@@ -88,7 +88,7 @@
                     </tbody>
                 </table>
 
-                <div class="block"> ${data.notes} </div>
+                <div class="block">Note: ${data.notes} </div>
             </div>
         </div>
     </section>

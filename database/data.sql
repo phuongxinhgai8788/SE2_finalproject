@@ -51,3 +51,10 @@ values  (4, '3687 Viking Drive, Dublin, Ohio
 620-789-4485', 7);
 delete from scm.warehouses where id=4;
 update scm.inventories set thumbnailUrl='Pendant_switch.jpg' where id=2;
+SELECT w.address, l.name AS managerName, wi.quantity AS
+                        quantity
+                        FROM warehouses w
+                                    LEFT JOIN labors l ON l.id = w.managerId
+                                     LEFT JOIN warehouseItems wi ON w.id = wI.warehouseId
+                            WHERE wi.inventoryId = 2
+                            GROUP BY wi.warehouseId

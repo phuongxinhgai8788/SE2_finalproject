@@ -33,13 +33,13 @@ public class WarehouseUtil
         var query = String
             .format(
                 "SELECT w.id, w.address, l.id AS managerId, l.name AS managerName, IFNULL(SUM(wI.quantity), 0) AS " +
-                    "itemsNum\n" +
-                    "    FROM %s w\n" +
-                    "             LEFT JOIN labors l ON l.id = w.managerId\n" +
-                    "             LEFT JOIN warehouseItems wI ON w.id = wI.warehouseId\n" +
-                    "    WHERE w.id = %d\n" +
-                    "    GROUP BY w.id",
-                tableName,
+                            "itemsNum\n" +
+                            "    FROM %s w\n" +
+                            "             LEFT JOIN labors l ON l.id = w.managerId\n" +
+                            "             LEFT JOIN warehouseItems wI ON w.id = wI.warehouseId\n" +
+                            "    WHERE w.id = %d\n" +
+                            "    GROUP BY w.id",
+                    tableName,
                 id);
         try (var session = HibernateUtil.getSession()) {
             return session.createNativeQuery(query, WarehouseDao.class)

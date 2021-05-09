@@ -96,7 +96,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="thumbnailUrl">Choose image</label>
-                            <input type="file" class="form-control form-control-rounded" id="thumbnailUrl" onchange="processSelectedFiles(this) value=${data.thumbnailUrl}" >
+                            <input type="file" class="form-control form-control-rounded" name="thumbnailUrl" id="thumbnailUrl" onchange="processSelectedFiles(this) value=${data.thumbnailUrl}" >
 
                         </div>
 
@@ -129,8 +129,8 @@
     <script>
         function processSelectedFiles(fileInput){
             var files = fileInput.files;
-            for (var i = 0; i< files.length;i++){
-                ${data.thumbnailUrl}= files[i].name;
+            for (let i = 0; i< files.length; i++){
+                ${data.thumbnailUrl} = files[i].name;
             }
         }
     </script>

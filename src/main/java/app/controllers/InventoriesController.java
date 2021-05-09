@@ -14,14 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = {
         "/inventories-management",
@@ -34,12 +27,10 @@ import java.util.stream.Collectors;
 public class InventoriesController extends BaseController {
 
     private InventoryUtil inventoryUtil;
-    private WarehouseUtil warehouseUtil;
 
     public void init() {
 
         inventoryUtil = new InventoryUtil();
-        warehouseUtil = new WarehouseUtil();
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
@@ -54,7 +45,8 @@ public class InventoriesController extends BaseController {
                     var price = Double.parseDouble(req.getParameter("price"));
                     var source = req.getParameter("source");
                     var tags = req.getParameter("tags");
-                    String thumbnailUrl = req.getParameter("thumbnailUrl");
+                    var file = req.getPart("thumbnailUrl");
+                    String thumbnailUrl = Paths.get(file.getSubmittedFileName()).getFileName().toString();
 
                     // init a data object
                     var inventoryDto = new InventoryDto(name,
@@ -89,8 +81,15 @@ public class InventoriesController extends BaseController {
                 var price = Double.parseDouble(req.getParameter("price"));
                 var source = req.getParameter("source");
                 var tags = req.getParameter("tags");
-                var thumbnailUrl = req.getParameter("thumbnailUrl");
+                var file = req.getPart("thumbnailUrl");
+                String thumbnailUrl = Paths.get(file.getSubmittedFileName()).getFileName().toString();
 
+                System.out.println("ID: " + id);
+                System.out.println("Name: " + name);
+                System.out.println("Price: " + price);
+                System.out.println("Source: " + source);
+                System.out.println("Tags: " + tags);
+                System.out.println("thumbnailUrl: " + thumbnailUrl);
 
                 // init a data object
                 var inventoryDto = new InventoryDto(name,
@@ -148,23 +147,7 @@ public class InventoriesController extends BaseController {
                 loadView(req, res, "inventories-management/data-form.jsp");
             }
             break;
-            /*case "/orders-management/details": {
-                var id = Integer.parseInt(req.getParameter("id"));
 
-                var singleResult = orderUtil.getByIdFullAttributes(id);
-                req.setAttribute("data", singleResult);
-
-                var orderDetails =
-                        orderDetailUtil.getByOrderIdFullAttributes(id);
-                req.setAttribute("orderDetails", orderDetails);
-
-                var deliveryDetails = orderDeliveryDetailUtil.getByOrderId(id);
-                req.setAttribute("deliveryDetails", deliveryDetails);
-
-                loadView(req, res, "orders-management/single.jsp");
-            }
-            break;
-            */
             case "/inventories-management/delete": {
                 var id = Integer.parseInt(req.getParameter("id"));
                 inventoryUtil.delete(id);
