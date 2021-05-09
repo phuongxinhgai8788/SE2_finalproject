@@ -141,12 +141,12 @@ public class LaborsController extends BaseController {
                 loadView(req, res, "labors-management/data-form.jsp");
         }
                 break;
-            case "/labors-management/delete": {
+          /*  case "/labors-management/delete": {
                 var id = Integer.parseInt(req.getParameter("id"));
                 laborUtil.delete(id);
                 redirect(req, res, "/labors-management");
             }
-            break;
+            break;*/
             default:
                 // TODO: fix
                 var listResult = laborUtil.getAllWithFullAttributes();

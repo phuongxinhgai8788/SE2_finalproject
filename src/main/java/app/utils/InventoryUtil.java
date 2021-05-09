@@ -1,5 +1,7 @@
 package app.utils;
 
+import app.models.dao.InventoryDao;
+import app.models.dao.LaborDao;
 import app.models.entities.Inventory;
 
 import java.util.Arrays;
@@ -18,4 +20,15 @@ public class InventoryUtil extends Util<Inventory> {
                 .anyMatch(tags::contains)).limit(3)
             .collect(Collectors.toList());
     }
+    public List<InventoryDao> getAllWithFullAttributes() {
+        var query = String.format(
+                "SELECT i.id, i.name, i.price, i.source, i.thumbnailUrl, i.tags\n" +
+                        "    FROM %s i\n",
+                tableName);
+        try (var session = HibernateUtil.getSession()) {
+            return session.createNativeQuery(query, InventoryDao.class)
+                    .getResultList();
+        }
+    }
+
 }

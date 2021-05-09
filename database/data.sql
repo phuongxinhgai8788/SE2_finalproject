@@ -50,3 +50,4 @@ values  (4, '3687 Viking Drive, Dublin, Ohio
         (5, '1458 Ridge Road, Dodge City, Kansas
 620-789-4485', 7);
 delete from scm.warehouses where id=4;
+update scm.inventories set thumbnailUrl='Pendant_switch.jpg' where id=2;

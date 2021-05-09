@@ -12,7 +12,7 @@
 
 <t:template>
     <form action="${pageContext.request.contextPath}/inventories-management/${action}"
-          method="POST">
+          method="POST" enctype ="multipart/form-data">
         <section class="card mt-3">
             <div class="card-content">
                 <div class="card-body">
@@ -53,85 +53,56 @@
                                    name="name"
                                    value="${data.name}" />
                         </div>
-
-
-
                         <div class="form-group col-md-6">
-                            <label for="email">Email</label>
-                            <c:if test="${email_errmsg != null}">
+                            <label for="price">Price</label>
+                            <c:if test="${price_errmsg != null}">
                                 -
-                                <span class="text-danger">${email_errmsg}</span>
+                                <span class="text-danger">${price_errmsg}</span>
                             </c:if>
-                            <input type="email"
+                            <input type="number"
                                    class="form-control form-control-rounded"
-                                   placeholder="enter email"
-                                   id="email"
-                                   name="email"
-                                   value="${data.email}" />
+                                   placeholder="enter price"
+                                   id="price"
+                                   name="price"
+                                   min="20"
+                                   value="${data.price}" />
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label for="password">Password</label>
-                            <c:if test="${password_errmsg != null}">
+                            <label for="source">Source</label>
+                            <c:if test="${source_errmsg != null}">
                                 -
-                                <span class="text-danger">${password_errmsg}</span>
+                                <span class="text-danger">${source_errmsg}</span>
                             </c:if>
-                            <input type="password"
+                            <input type="text"
                                    class="form-control form-control-rounded"
-                                   placeholder="enter password"
-                                   id="password"
-                                   name="password"
-                                   value="${data.password}" />
+                                   placeholder="enter source"
+                                   id="source"
+                                   name="source"
+                                   value="${data.source}" />
                         </div>
+                        <div class="form-group col-md-6">
+                            <label for="tags">Tags</label>
+                            <c:if test="${tags_errmsg != null}">
+                                -
+                                <span class="text-danger">${tags_errmsg}</span>
+                            </c:if>
+                            <input type="text"
+                                   class="form-control form-control-rounded"
+                                   placeholder="enter tag"
+                                   id="tags"
+                                   name="tags"
+                                   value="${data.tags}" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="thumbnailUrl">Choose image</label>
+                            <input type="file" class="form-control form-control-rounded" id="thumbnailUrl" onchange="processSelectedFiles(this) value=${data.thumbnailUrl}" >
+
+                        </div>
+
+
                     </div>
 
-                </div>
-            </div>
-        </section>
-
-        <section class="card mt-3">
-            <div class="card-content">
-                <div class="card-body">
-                    <h5 class="card-title">Job</h5>
-                    <hr />
-
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="roleId">Role</label>
-                            <c:if test="${roleId_errmsg != null}">
-                                -
-                                <span class="text-danger">${roleId_errmsg}</span>
-                            </c:if>
-                            <select id="roleId"
-                                    name="roleId"
-                                    class="form-control">
-                                <c:forEach items="${roles}"
-                                           var="item">
-                                    <option value="${item.id}"
-                                        ${item.id == data.roleId ? "selected" : ""}>${item.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label for="transportingUnitId">
-                                Transporting Unit
-                            </label>
-                            <c:if test="${transportingUnitId_errmsg != null}">
-                                -
-                                <span class="text-danger">${transportingUnitId_errmsg}</span>
-                            </c:if>
-                            <select id="transportingUnitId"
-                                    name="transportingUnitId"
-                                    class="form-control">
-                                <c:forEach items="${transportingUnits}"
-                                           var="item">
-                                    <option value="${item.id}"
-                                        ${item.id == data.transportingUnitId ? "selected" : ""}>${item.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -142,7 +113,7 @@
                     <h5 class="card-title"></h5>
                     <hr />
                     <div class="form-group text-right">
-                        <a href="${pageContext.request.contextPath}/labors-management"
+                        <a href="${pageContext.request.contextPath}/inventories-management"
                            class="btn btn-light btn-round px-5">
                             <i class="icon-lock"></i> Back to list
                         </a>
@@ -155,4 +126,12 @@
             </div>
         </section>
     </form>
+    <script>
+        function processSelectedFiles(fileInput){
+            var files = fileInput.files;
+            for (var i = 0; i< files.length;i++){
+                ${data.thumbnailUrl}= files[i].name;
+            }
+        }
+    </script>
 </t:template>
