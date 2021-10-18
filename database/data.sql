@@ -58,3 +58,6 @@ SELECT w.address, l.name AS managerName, wi.quantity AS
                                      LEFT JOIN warehouseItems wi ON w.id = wI.warehouseId
                             WHERE wi.inventoryId = 2
                             GROUP BY wi.warehouseId
+/**
+  Hello, it's me
+ */
